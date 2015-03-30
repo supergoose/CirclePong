@@ -79,5 +79,10 @@ var vector = {
 	divideBy: function(val) {
 		this._x /= val;
 		this._y /= val;
+	},
+
+	dotProduct: function(v2)
+	{
+		return v2.getX() * this._x + v2.getY() * this._y;
 	}
 };

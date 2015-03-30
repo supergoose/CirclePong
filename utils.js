@@ -70,62 +70,35 @@ var utils = {
 		return Math.floor(min + Math.random() * (max - min + 1));
 	},
 
-	findDistance: function(x1, y1, x2, y2) {
-       var a = Math.abs(x1 - x2);
-       var b = Math.abs(y1 - y2);
+	circleInRotatedRect: function( circX, circY, circRadius, rectCentX, rectCentY, rectWidth, rectHeight, rectAngle) 
+	{
+		
+		var rotatedPx = utils.rotatePointAboutPointX(circX, circY, rectCentX, rectCentY, rectAngle);
+		var rotatedPy = utils.rotatePointAboutPointY(circX, circY, rectCentX, rectCentY, rectAngle);
 
-       var c = Math.sqrt((a * a) + (b * b));
-       return c;
+		return (utils.inRange(rotatedPx, rectCentX-rectWidth/2-circRadius, rectCentX+rectWidth/2+circRadius) && utils.inRange(rotatedPy, rectCentY-rectHeight/2-circRadius, rectCentY+rectHeight/2+circRadius));
 	},
 
-	circleInRotatedRect: function( circX, circY, circRadius, rectX, rectY, rectWidth, rectHeight, rectAngle) 
-   {
+	centerPointOfRotatedRectX: function(rectX, theta)
+	{
+		return Math.cos(theta) + rectX;
+	},
 
-    // Rotate circle's center point back
-    var rectCenterX = rectX + rectWidth/2 ;
-    var rectCenterY = rectY + rectHeight/2 ;
+	centerPointOfRotatedRectY: function(rectY, theta)
+	{
+		return Math.sin(theta) + rectY;
+	},
 
-    var cx = (Math.cos(rectAngle) * (circX - rectCenterX)) - (Math.sin(rectAngle) * (circY - rectCenterY)) + rectCenterX;
-    var cy = (Math.sin(rectAngle) * (circX - rectCenterX)) + (Math.cos(rectAngle) * (circY - rectCenterY)) + rectCenterY;
+	rotatePointAboutPointX: function(aX, aY, bX, bY, theta)
+	{
+		return Math.cos(theta)*(aX-bX)-Math.sin(theta)*(aY-bY)+bX;
 
-    // Closest point
-    var x, y;
+	},
+	rotatePointAboutPointY: function(aX, aY, bX, bY, theta)
+	{
+		return Math.sin(theta)*(aX-bX)+Math.cos(theta)*(aY-bY)+bY;
 
-    // Find the unrotated closest x point from center of unrotated circle
-    if (cx < rectX) {
-        x = rectX;
-    }
-    else if (cx > rectX + rectWidth){
-        x = rectX + rectWidth;
-    }
-    else{
-        x = cx;
-     }
-
-    // Find the unrotated closest y point from center of unrotated circle
-    if (cy < rectY){
-        y = rectY;
-    }
-    else if (cy > rectY + rectHeight) {
-        y = rectY + rectHeight;
-    }
-    else {
-        y = cy;
-     }
-    // Determine collision
-    var collision = false;
-
-    var distance = utils.findDistance(cx, cy, x, y);
-
-    if (distance < circRadius) {
-        collision = true; // Collision
-    }
-    else {
-        collision = false;
-    }
-     return collision;
-}
-
+	},
 
  
 
